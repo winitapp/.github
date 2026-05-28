@@ -1,0 +1,19 @@
+name: Spec Bot
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  spec:
+    # Only trigger on issue comments (not PR comments) containing @claude-thedev
+    if: |
+      github.event.issue.pull_request == null &&
+      contains(github.event.comment.body, '@claude-thedev')
+    uses: winitapp/claude-thedev/.github/workflows/claude-spec.yml@main
+    with:
+      issue_number: ${{ github.event.issue.number }}
+      issue_repo: ${{ github.repository }}
+    secrets:
+      OPENROUTER_API_KEY_DOCS: ${{ secrets.OPENROUTER_API_KEY_DOCS }}
+      PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
